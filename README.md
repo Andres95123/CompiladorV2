@@ -1,18 +1,29 @@
-## Getting Started
+# OverON
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+OverON es un intento de compilador realizado a mano con Java.
 
-## Folder Structure
+## Descripción
 
-The workspace contains two folders by default, where:
+OverON es un proyecto de compilador desarrollado en Java. El objetivo principal de este proyecto es explorar los conceptos fundamentales de la compilación y comprender cómo funciona un compilador desde cero.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Características
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+- Implementado en Java
+- Compilador de propósito general
+- Desarrollado manualmente
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Requisitos
 
-## Dependency Management
+- Java OpenJDK 17 o superior
+- IDE de Java (por ejemplo, IntelliJ IDEA, Eclipse)
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Uso
+
+1. Clona el repositorio de OverON.
+2. Abre el proyecto en tu IDE de Java.
+3. Compila el código fuente del compilador.
+4. Ejecuta el compilador con un archivo de código fuente OverON como entrada.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
