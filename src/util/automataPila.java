@@ -44,7 +44,13 @@ public class automataPila {
     public String getReduccion(String tokens) {
         // Transformar tokens a un array de string con sus getValor
 
-        return reducciones.get(tokens);
+        String reduccion = reducciones.get(tokens);
+
+        if (reducciones.containsKey(reduccion)) {
+            reduccion = reducciones.get(reduccion);
+        }
+
+        return reduccion;
 
     }
 
