@@ -1,0 +1,24 @@
+package sintactico;
+
+public enum TokensEnum {
+	PIKACHU,
+	RAYO,
+	NINETAILS,
+	RAPIDASH,
+	VEGETTA,
+	AGUA,
+	CHARMANDER,
+	GRENINJA,
+	TENTACRUEL,
+	POKEMON,
+	ZAPDOS,
+	DRAGON_BALL,
+	GOKU,
+	FREEZER,
+	PONYTA,
+	ARCANINE,
+	FUEGO,
+	ELECTABUZZ,
+	SQUIRTLE,
+	::=,
+}

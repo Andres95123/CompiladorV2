@@ -20,7 +20,7 @@ public class Token<Alfabeto extends Enum<Alfabeto>> {
 
     @Override
     public String toString() {
-        return tipo + " {" + valor + "}";
+        return valor;
     }
 
 }
