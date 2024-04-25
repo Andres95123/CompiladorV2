@@ -1,11 +1,13 @@
 package sintactico;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import lexico.ParserLexOptions;
 import util.Scanner;
@@ -15,6 +17,7 @@ import util.automataPila;
 public class automataCompiler {
     private automataPila automataPila = new automataPila();
     private Scanner scanner;
+    private List<String> codeList = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         new automataCompiler().init();
@@ -24,9 +27,27 @@ public class automataCompiler {
         scanner = new Scanner("fichero.txt");
 
         Stack<Token> stack = new Stack<>();
+
         while (scanner.hasNext()) {
             Token token = scanner.next();
 
+            // Si el token es un EOL, entonces se ha terminado la linea y se procede a
+            // obtener el codigo ejecutable entre {}
+
+            if (token.getTipo() == ParserLexOptions.OPEN_EX) {
+                String codigo = "";
+                while (scanner.hasNext()) {
+                    if (token.getTipo() == ParserLexOptions.CLOSE_EX) {
+                        codigo += token.getValor();
+                        token = scanner.next();
+                        codeList.add(codigo);
+                        break;
+                    }
+                    codigo += token.getValor();
+                    token = scanner.next();
+                }
+
+            }
             // Añadimos los tokens a la pila
             stack.push(token);
             // Esperamos hasta que termine la reduccion y luego la añadimos al automata
@@ -40,12 +61,20 @@ public class automataCompiler {
                 for (int i = 0; i < tokens.length; i++) {
                     if (tokens[i].getTipo() == ParserLexOptions.OR) {
                         Token[] tokensCorte = Arrays.copyOfRange(tokens, ultimoCorte, i);
+                        if (codeList.size() >= 1) {
+                            automataPila.addExecute(tokensCorte, codeList.remove(0));
+                        }
                         automataPila.addReduccion(tokensCorte, tokenReduccion);
                         ultimoCorte = i + 1;
                     }
                 }
                 // Subimos el ultimo corte, sin el token de EOL (length-1)
-                automataPila.addReduccion(Arrays.copyOfRange(tokens, ultimoCorte, tokens.length - 1), tokenReduccion);
+                Token[] tokensCorte = Arrays.copyOfRange(tokens, ultimoCorte, tokens.length - 1);
+                if (codeList.size() >= 1) {
+                    automataPila.addExecute(tokensCorte, codeList.remove(0));
+                }
+
+                automataPila.addReduccion(tokensCorte, tokenReduccion);
                 stack.clear();
             }
         }
@@ -56,7 +85,7 @@ public class automataCompiler {
         // Vaciamos la pila para empezar a usarla como almacenaje de tokens
         stack.clear();
 
-        Stack stack2 = new Stack();
+        Stack<Token> stack2 = new Stack();
 
         // Vamos leyendo tokens y vamos revisando con el automataPila si hay alguna
         // reduccion
@@ -68,18 +97,22 @@ public class automataCompiler {
             // la pila
 
             for (int i = 0; i < stack2.size(); i++) {
-                Token[] tokens = new Token[stack2.size()];
-                stack2.toArray(tokens);
+                Token[] tokens = stack2.toArray(new Token[0]);
                 String tokensString = "";
-                Token[] tokensTmp = Arrays.copyOfRange(tokens, tokens.length - i - 1, tokens.length);
+                // Transformamos los tokens en strings
+                Token[] tokensTmp = Arrays.copyOfRange(tokens, i, tokens.length);
                 for (int j = 0; j < tokensTmp.length; j++) {
                     tokensString += tokensTmp[j].getValor();
                 }
+                // Revisamos todas las combinaciones de reducciones hasta que ya no queden
                 String redu = automataPila.getReduccion(tokensString);
                 if (redu != null) {
+                    // Invertimos la pila
+                    // Sacamos los tokens que se van a reducir
                     for (int j = 0; j < tokensTmp.length; j++) {
                         stack2.pop();
                     }
+
                     stack2.add(new Token(ParserLexOptions.ID, redu));
                     i = -1;
                 }
@@ -92,4 +125,5 @@ public class automataCompiler {
 
         scanner.close();
     }
+
 }

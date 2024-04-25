@@ -1,15 +1,13 @@
 package util;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import lexico.ParserLexOptions;
-
 public class automataPila {
     HashMap<String, String> reducciones;
     Set<String> tokensEnum = new HashSet<>();
+    HashMap<String, String> executes = new HashMap<>();
 
     public automataPila() {
         reducciones = new HashMap<>();
@@ -41,13 +39,32 @@ public class automataPila {
         reducciones.put(String.join("", tokensString), token.getValor());
     }
 
+    public void addExecute(Token[] tokens, String execute) {
+        String[] tokensString = new String[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            tokensString[i] = tokens[i].getValor();
+        }
+
+        executes.put(String.join("", tokensString), execute);
+    }
+
+    public void getExecute(String token) {
+        System.out.println("Ejecutando: " + executes.get(token));
+        codeExecutor.execute(executes.get(token));
+        System.out.println("");
+
+    }
+
     public String getReduccion(String tokens) {
         // Transformar tokens a un array de string con sus getValor
 
         String reduccion = reducciones.get(tokens);
 
-        if (reducciones.containsKey(reduccion)) {
-            reduccion = reducciones.get(reduccion);
+        // Obtenemos todas las reducciones de la clave, si existe mas de una clave en el
+        // hashmap con dicha clave, error de ambiguedad
+
+        if (executes.containsKey(tokens)) {
+            getExecute(tokens);
         }
 
         return reduccion;

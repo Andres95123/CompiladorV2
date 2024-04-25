@@ -17,6 +17,10 @@ public class ParserLex {
                 return ParserLexOptions.EOL;
             case inLex.POSITIVE_CLOSURE:
                 return ParserLexOptions.POSITIVE_CLOSURE;
+            case inLex.OPEN_EX:
+                return ParserLexOptions.OPEN_EX;
+            case inLex.CLOSE_EX:
+                return ParserLexOptions.CLOSE_EX;
             default:
 
                 if (input.matches(inLex.CONST_MATCH)) {
