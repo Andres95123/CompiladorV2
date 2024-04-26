@@ -1,9 +1,0 @@
-com\OverOn\LexerCompiler\regexContainer.class
-com\OverOn\util\Token.class
-com\OverOn\LexerCompiler\lexerOptions.class
-com\OverOn\LexerCompiler\reservedWords.class
-com\OverOn\LexerCompiler\LexerToken.class
-com\OverOn\LexerCompiler\lexerTokenizer.class
-com\OverOn\LexerCompiler\ScannerLexer.class
-com\OverOn\LexerCompiler\lexerCompiler.class
-com\OverOn\Main.class
