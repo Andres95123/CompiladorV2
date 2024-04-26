@@ -21,3 +21,13 @@ extensions.json
 
 
 bin/
+
+# Ignora los .jar y .class
+
+*.jar
+*.class
+
+# Ignora la carpeta tmp y out
+
+tmp/
+out/
