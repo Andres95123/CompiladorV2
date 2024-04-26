@@ -31,3 +31,8 @@ bin/
 
 tmp/
 out/
+
+# Ignora los archivos target de maven
+
+target/
+
