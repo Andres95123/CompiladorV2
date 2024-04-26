@@ -1,1 +1,0 @@
-package tmp; public class tmpCode { public static void main(String args[]) {System.out.println("Findelcompilado");} }
