@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lexico.ParserLexOptions;
 import util.Scanner;
@@ -12,6 +13,7 @@ import util.Token;
 public class lexerCompiler {
 
     ScannerLexer scanner;
+    Token lastToken;
     List<regexContainer> regexList = new ArrayList<>();
     HashMap<String, String> specialAssigns = new HashMap<>();
 
@@ -37,6 +39,8 @@ public class lexerCompiler {
         scanner = new ScannerLexer(path);
         obtenerStartDefinitions();
         obtenerAllRegex();
+        // Reordenar los regex segun el orden de aparicion
+        obtenerOrden();
 
         // Verificar que se ha llegado al final del archivo
         if (scanner.hasNext()) {
@@ -50,12 +54,64 @@ public class lexerCompiler {
 
     }
 
+    private void obtenerOrden() {
+
+        // El fichero debe empezar con la palabra reservada ORDER
+
+        if (lastToken.getTipo() != lexerOptions.ORDER) {
+            // El orden es opcional
+            return;
+        }
+
+        // Saltar el token de asignacion
+
+        // Ir leyendo los tokens con caracteristicas especiales hasta llegar al token
+        // deffinitions
+        List<String> orderList = new ArrayList<>();
+        while (scanner.hasNext()) {
+
+            lastToken = scanner.next();
+
+            if (lastToken.getTipo() == lexerOptions.END) {
+                break;
+            }
+
+            // En este apartado hay asignaciones especiales, como la de package, donde se
+            // determina el package del Scanner y el lexer creados
+
+            if (lastToken.getTipo() == lexerOptions.ID) {
+
+                orderList.add(lastToken.getValor());
+
+            }
+
+        }
+
+        // Reordenar los regex segun el orden de aparicion con la mejor complejidad
+        // posible
+        Map<String, regexContainer> regexMap = new HashMap<>();
+        for (regexContainer regexContainer : regexList) {
+            regexMap.put(regexContainer.getToken(), regexContainer);
+        }
+
+        List<regexContainer> newRegexList = new ArrayList<>();
+        for (String order : orderList) {
+            regexContainer regexContainer = regexMap.get(order);
+            if (regexContainer != null) {
+                newRegexList.add(regexContainer);
+            }
+        }
+        regexList = newRegexList;
+
+        System.out.println("Elementos en el orden: " + orderList.size() + " elementos : " + orderList.toString());
+    }
+
     private void obtenerStartDefinitions() {
 
         // El fichero debe empezar con la palabra reservada START
-        Token token = scanner.next();
+        lastToken = scanner.next();
 
-        if (token.getTipo() != lexerOptions.START) {
+        if (lastToken.getTipo() != lexerOptions.START) {
             throw new IllegalArgumentException("Error en la definicion del fichero, se esperaba la palabra START");
         }
 
@@ -65,16 +121,26 @@ public class lexerCompiler {
         // deffinitions
         while (scanner.hasNext()) {
 
-            token = scanner.next();
+            lastToken = scanner.next();
 
-            if (token.getTipo() == lexerOptions.DEFINITIONS) {
+            if (lastToken.getTipo() == lexerOptions.DEFINITIONS) {
                 break;
             }
 
             // En este apartado hay asignaciones especiales, como la de package, donde se
             // determina el package del Scanner y el lexer creados
 
-            if (token.getTipo() == lexerOptions.ID) {
+            if (lastToken.getTipo() == lexerOptions.ID) {
+
+                // Revisamos que sea una asignacion especial
+                if (!reservedWords.isStartDeclaration(lastToken.getValor())) {
+                    throw new IllegalArgumentException(
+                            "Error con la definicion inicial, no se reconoce la palabra reservada "
+                                    + lastToken.getValor()
+                                    + " aproximadamente en el token "
+                                    + scanner.getIndex());
+                }
+
                 scanner.next(); // Saltar el igual
                 Token regex = scanner.next();
 
@@ -86,11 +152,43 @@ public class lexerCompiler {
 
                 String regexSTR = regex.getValor().substring(1);
                 regexSTR = regexSTR.substring(0, regexSTR.length() - 1);
-                specialAssigns.put(token.getValor().toUpperCase(), regexSTR);
+                specialAssigns.put(lastToken.getValor().toUpperCase(), regexSTR);
             }
         }
 
     }
+
+    private void obtenerAllRegex() {
+
+        while (scanner.hasNext()) {
+
+            // Obtener los regex, que tendran la forma ID = REGEX
+
+            lastToken = scanner.next();
+
+            // Si se llega al END, terminar los regex
+            if (lastToken.getTipo() == lexerOptions.END || lastToken.getTipo() == lexerOptions.ORDER) {
+                break;
+            }
+
+            if (lastToken.getTipo() == lexerOptions.ID) {
+                scanner.next(); // Saltar el igual
+                Token regex = scanner.next();
+
+                // Si no es un regex constante, lanzar error
+                if (regex.getTipo() != lexerOptions.CONST) {
+                    throw new IllegalArgumentException(
+                            "Error en la definicion de los regex aproximadamente en el token " + scanner.getIndex());
+                }
+
+                regexList.add(new regexContainer(regex.getValor(), lastToken.getValor()));
+            }
+
+        }
+
+    }
+
+    // Escribir el fichero
 
     private void createScannerFile() {
 
@@ -223,36 +321,6 @@ public class lexerCompiler {
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        }
-
-    }
-
-    private void obtenerAllRegex() {
-
-        while (scanner.hasNext()) {
-
-            // Obtener los regex, que tendran la forma ID = REGEX
-
-            Token token = scanner.next();
-
-            // Si se llega al END, terminar los regex
-            if (token.getTipo() == lexerOptions.END) {
-                break;
-            }
-
-            if (token.getTipo() == lexerOptions.ID) {
-                scanner.next(); // Saltar el igual
-                Token regex = scanner.next();
-
-                // Si no es un regex constante, lanzar error
-                if (regex.getTipo() != lexerOptions.CONST) {
-                    throw new IllegalArgumentException(
-                            "Error en la definicion de los regex aproximadamente en el token " + scanner.getIndex());
-                }
-
-                regexList.add(new regexContainer(regex.getValor(), token.getValor()));
-            }
-
         }
 
     }

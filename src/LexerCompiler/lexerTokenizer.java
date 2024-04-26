@@ -13,6 +13,8 @@ public class lexerTokenizer {
                 return lexerOptions.DEFINITIONS;
             case lexerOptions.END_MATCH:
                 return lexerOptions.END;
+            case lexerOptions.ORDER_MATCH:
+                return lexerOptions.ORDER;
             default:
 
                 if (input.matches(lexerOptions.CONST_MATCH)) {

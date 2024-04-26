@@ -36,14 +36,12 @@ public class Scanner {
         }
 
         // Comprobamos si es algun token de los definidos
-        String[] patterns = { Lexer.NUMERO_MATCH, Lexer.OPERADOR_MATCH, Lexer.NUMERO_HEXA_MATCH, Lexer.WS_MATCH,
-                Lexer.ENDLINE_MATCH, Lexer.IF_MATCH, Lexer.ELSE_MATCH, Lexer.ID_MATCH };
-        int[] tokens = { Lexer.NUMERO, Lexer.OPERADOR, Lexer.NUMERO_HEXA, Lexer.WS, Lexer.ENDLINE, Lexer.IF, Lexer.ELSE,
-                Lexer.ID };
+        String[] patterns = { Lexer.WS_MATCH, Lexer.ENDLINE_MATCH, Lexer.IF_MATCH, Lexer.ELSE_MATCH, Lexer.NUMERO_HEXA_MATCH, Lexer.NUMERO_MATCH, Lexer.OPERADOR_MATCH, Lexer.ID_MATCH };
+        int[] tokens = { Lexer.WS, Lexer.ENDLINE, Lexer.IF, Lexer.ELSE, Lexer.NUMERO_HEXA, Lexer.NUMERO, Lexer.OPERADOR, Lexer.ID };
 
         for (int i = 0; i < patterns.length; i++) {
             if (sb.toString().matches(patterns[i])) {
-                return new LexerToken(tokens[i], sb.toString());
+                return new LexerToken(tokens[i],sb.toString());
             }
         }
 

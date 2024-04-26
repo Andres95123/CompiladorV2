@@ -9,4 +9,13 @@
     ENDLINE = "[\n]+"
     IF = "if"
     ELSE = "else"
+::ORDER::
+    WS
+    ENDLINE
+    IF
+    ELSE
+    NUMERO_HEXA
+    NUMERO
+    OPERADOR
+    ID
 ::END::
