@@ -15,5 +15,6 @@ public class inLex {
     public final static String CLOSE_EX = "}";
 
     public final static String ID_MATCH = "[a-zA-Z_][a-zA-Z0-9_]*";
-    public final static String CONST_MATCH = "[\"'][^\"']*" + ID_MATCH + "[^\"']*['\"]";
+    public final static String NUM_MATCH = "[0-9]+";
+    public final static String CONST_MATCH = "[\"'][^\"']*[" + ID_MATCH + "|" + NUM_MATCH + "][^\"']*['\"]";
 }

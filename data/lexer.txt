@@ -1,0 +1,12 @@
+::START::
+    package = "out"
+::DEFINITIONS::
+    ID = "[a-zA-Z]+"
+    NUMERO = "[0-9]+"
+    OPERADOR = "[+\\-*/]"
+    NUMERO_HEXA = "0x[0-9]+"
+    WS = "['\u0020'\t\n]+"
+    ENDLINE = "[\n]+"
+    IF = "if"
+    ELSE = "else"
+::END::

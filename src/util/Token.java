@@ -10,6 +10,10 @@ public class Token<Alfabeto extends Enum<Alfabeto>> {
         this.valor = valor;
     }
 
+    public Token(Alfabeto tipo) {
+        this(tipo, "");
+    }
+
     public Alfabeto getTipo() {
         return tipo;
     }

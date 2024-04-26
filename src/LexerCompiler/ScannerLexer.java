@@ -1,17 +1,16 @@
-package util;
+package LexerCompiler;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import lexico.ParserLex;
-import lexico.ParserLexOptions;
+import util.Token;
 
-public class Scanner {
+public class ScannerLexer {
 
     private File archivo;
     private BufferedReader bufferedReader;
@@ -22,7 +21,7 @@ public class Scanner {
     int index = 0;
     int last = 0;
 
-    public Scanner(String archivo) throws IOException {
+    public ScannerLexer(String archivo) throws IOException {
         this.archivo = new File("data/" + archivo);
         bufferedReader = new BufferedReader(new FileReader(this.archivo));
 
@@ -37,6 +36,9 @@ public class Scanner {
             res = bufferedReader.readLine();
             if (res != null) {
                 for (String token : res.split(" ")) {
+                    if (token.equals("")) {
+                        continue;
+                    }
                     tokens.add(token);
                     last++;
                 }
@@ -45,7 +47,7 @@ public class Scanner {
 
         // Convertir los tokens a Enum
         for (String token : tokens) {
-            tokensEnum.add(new Token(ParserLex.getParsedLex(token), token));
+            tokensEnum.add(new Token(lexerTokenizer.getParsedLex(token), token));
         }
     }
 
