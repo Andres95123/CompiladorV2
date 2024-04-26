@@ -1,10 +1,10 @@
-package com.OverOn;
+package com.overon.lexer;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import com.OverOn.LexerCompiler.lexerCompiler;
+import com.overon.lexer.LexerCompiler.lexerCompiler;
 
 public class Main {
 

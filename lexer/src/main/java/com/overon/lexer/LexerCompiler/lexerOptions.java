@@ -1,4 +1,4 @@
-package com.OverOn.LexerCompiler;
+package com.overon.lexer.LexerCompiler;
 
 public enum lexerOptions {
     ID, CONST, ASSIGN, START, DEFINITIONS, ORDER, END;

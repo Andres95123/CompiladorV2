@@ -1,4 +1,4 @@
-package com.OverOn.util;
+package com.overon.comunes;
 
 public class Token<Alfabeto extends Enum<Alfabeto>> {
 

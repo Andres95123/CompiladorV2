@@ -1,4 +1,4 @@
-package com.OverOn.LexerCompiler;
+package com.overon.lexer.LexerCompiler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.OverOn.util.Token;
+import com.overon.comunes.Token;
 
 public class ScannerLexer {
 
