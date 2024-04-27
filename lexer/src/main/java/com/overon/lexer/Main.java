@@ -26,7 +26,7 @@ public class Main {
 
         // Si añade un argumento extra para el output, guardarlo y sino usar el working
         // directory
-        String output = args.length == 2 ? args[1] : System.getProperty("user.dir") + "\\Scanner.java";
+        String output = args.length == 2 ? args[1] : System.getProperty("user.dir");
         String input = args[0];
 
         lexerCompiler lexerCompiler = new lexerCompiler();

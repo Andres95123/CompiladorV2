@@ -30,9 +30,9 @@ public class lexerCompiler {
         }
 
         // Crear el archivo de salida
-        createLexerFile(outPath);
+        createLexerFile(outPath + "\\Lexer.java");
         // Crear el archivo del Scanner
-        createScannerFile(outPath);
+        createScannerFile(outPath + "\\Scanner.java");
 
     }
 
