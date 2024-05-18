@@ -1,0 +1,16 @@
+::SETTINGS::
+    START:E
+    TABLE:LL1
+::PRODUCTIONS::
+    E -> T E'
+    E' -> + T E'
+    E' -> - T E'
+    E' -> 
+    T -> F T'
+    T' -> * F T'
+    T' -> / F T'
+    T' -> % F T'
+    T' -> 
+    F -> ( E )
+    F -> id
+::END::

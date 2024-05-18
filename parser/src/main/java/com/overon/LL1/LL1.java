@@ -1,15 +1,15 @@
 package com.overon.LL1;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
-public class LL1 {
+import com.overon.interfaces.SymbolTables;
+
+public class LL1 implements SymbolTables {
 
     // Control de los terminales y no terminales
     private HashSet<String> TERMINALES;
@@ -98,6 +98,9 @@ public class LL1 {
             changed = false;
             for (ProduccionLL produccion : producciones) {
 
+                // Si es epsilon, añadir todos los FOLLOW de la izquierda
+                // TODO : Reparar cuando hay epsilon en la izquierda de un no terminal
+
                 String left = produccion.getLeft();
                 String[] right = produccion.getRight();
 
@@ -153,6 +156,12 @@ public class LL1 {
                 if (!LL1TABLE.containsKey(left)) {
                     LL1TABLE.put(left, new HashMap<>());
                 }
+                if (LL1TABLE.get(left).containsKey(right[0])) {
+                    throw new RuntimeException(
+                            "Collision error: Multiple productions for the same terminal and non-terminal combination" +
+                                    "Collision between " + left + " and " + right[0] + " with productions "
+                                    + LL1TABLE.get(left).get(right[0]) + " and " + produccion);
+                }
                 LL1TABLE.get(left).put(right[0], produccion);
             } else {
                 // Si el primer simbolo de la derecha es no terminal, añadir todos los FIRST de
@@ -203,6 +212,7 @@ public class LL1 {
         return sb.toString();
     }
 
+    @Override
     public boolean parse(String[] tokens) {
         Stack<String> stack = new Stack<>();
         stack.push("$");
@@ -267,10 +277,11 @@ public class LL1 {
 
         LL1 lr1 = new LL1(TERMINALES, NO_TERMINALES, producciones, "E");
         System.out.println(lr1.printLL1Table());
-        if (lr1.parse(new String[] { "ID","ADD","ID","ID","ADD","ID", "$" })) {
+        if (lr1.parse(new String[] { "ID", "ADD", "ID", "ID", "ADD", "ID", "$" })) {
             System.out.println("Input is valid according to the grammar.");
         } else {
             System.out.println("Input is invalid.");
         }
     }
+
 }
